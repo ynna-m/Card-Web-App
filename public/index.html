@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Major Arcana Tarot Cards</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+    <link rel="manifest" href="manifest.json"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/my-css.css">
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="jquery/jquery.flip.js"></script>
+    <script src="jquery/jquery.validate.min.js"></script>
+    <script src="jquery/additional-methods.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/my-script.js"></script>
+  </head>
+  <body>
+     <div class="container-fluid d-flex flex-column">
+        <!-- Modals -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="saveDrawModal">
+          <!-- Opens up save modal if any cards are selected -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="">Save Draw</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="validate-form">
+                  <div class="row">
+                    <label for="title">Title:</label> <br>
+                    <input type="text" class="form-control" id="title" name="title" min-length="1" value="" required><br>                  
+                  </div>
+                  <div class="row">
+                    <label for="fquestion">Full Question:</label><br>
+                    <textarea class="form-control" id="fquestion" name="fquestion" min-length="1" value="" required></textarea>                  
+                  </div>
+                  <label for="">Cards:</label><br>
+                  <div class="card-area">
+                    <div class ="row flex-fill" id="top-save"></div>
+                    <div class ="row flex-fill" id="middle-save"></div>
+                    <div class ="row flex-fill" id="bottom-save"></div>
+                  </div>                
+                </form>               
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveDraw" value="Save">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="reshuffleModalWarningAfterSave">
+          <!-- Reshuffle Warning prompt after Saving-->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Do you want to reshuffle?</p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger btnReShuffle-yes" id="btnReShuffle-yes">Yes</button>              
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="saveDrawModalNone">
+          <!-- If no cards are drawn -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Please Try Again</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>No cards drawn. Please select cards.</p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="reshuffleModalWarning">
+          <!-- Reshuffle Warning prompt if there are cards drawn -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>You have cards flipped open. Are you sure you want to reshuffle?</p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger btnReShuffle-yes" id="btnReShuffle-yes">Yes</button>
+                <button type="button" class="btn btn-primary" id="btnReShuffle-save">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="savedQueryModal">
+          <!-- View Saved Queries-->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id=""></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>
+                  <input type="text" class="form-control" name="" id="sQuestion" value="Praise be to God" disabled></input>
+                  <div class="card-area">
+                    <div class ="row flex-fill" id="stop"></div>
+                    <div class ="row flex-fill" id="smiddle"></div>
+                    <div class ="row flex-fill" id="sbottom"></div>
+                  </div>
+                </p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnEditSave">Edit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="uploadDeckModal">
+          <!-- Upload Deck -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Upload your Custom Deck</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form action="" id="deckUpload-form">
+                    <label for="deckName" class="form=label">Deck Name: </label> <br>
+                    <input type="text" class="form-control" name="deckName" id="deckName" min-length="1" required> <br> <br>
+                    <label for="deckUpload" class="form-label">File: </label>
+                    <input type="file" class="form-control-file deckUpload" id="deckUpload" name="deckUpload" accept="zip" required/><br />
+                    <small>Note: The file uploaded must be a zip file. 
+                      And the <b>cards</b> should be named <b> 0000, 0001, 0002,</b> etc. based on the tarot order. So The Fool is <b>0000</b>,
+                    The Magician is <b>0002</b>, and so on. As for the back face of the card, name it <b>cardBack</b>.
+                    </small>
+                  </form>
+                  <div class="card-area">
+                    <div class ="row flex-fill" id="top-deck"></div>
+                    <div class ="row flex-fill" id="middle-deck"></div>
+                    <div class ="row flex-fill" id="bottom-deck"></div>
+                  </div>       
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnUpload">Upload</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="uploadWarningModal">
+          <!-- Warning prompt if user wants to clear or append savelist -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p id="uploadWarning"></p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="saveListImportModal">
+          <!-- Warning prompt if user wants to clear or append savelist -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Do you want to append to save list, or load a new one 
+                  <b>(Warning: this will clear the list)</b>?</p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAppendSaveList">Append</button>
+                <button type="button" class="btn btn-danger" id="btnRenewSaveList">Load New</button>
+                <button type="button" class="btn btn-secondary" id="btnCancelImportSaveList" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Body -->
+        <header class="flex-row navbar">
+            <div class="navbar-header" >
+              <h2 class="navbar-brand" id="Header-Title">Major Arcana Tarot Cards</h2>         
+            </div>
+        </header>
+        <main class="flex-row d-flex text-center">
+          <div class="col-2 list-group sidenav">
+            <a href="#" class="list-group-item list-group-item-action" id="butInstall" aria-label="Install" data-toggle="tooltip" data-placement="right" title="Install">Install App</a>
+            <a href="#" class="list-group-item list-group-item-action" id="linkReshuffle" data-toggle="tooltip" data-placement="right" title="Reshuffle cards">Reshuffle</a>
+            <a href="#" class="list-group-item list-group-item-action"  id="linkFlipAll" data-toggle="tooltip" data-placement="right" title="Flips all cards">Flip All Cards</a>
+            <a href="#" class="list-group-item list-group-item-action" target="_blank" data-toggle="tooltip" data-placement="right" title="Opens a new tab">New Session</a>
+            <a href="#" class="list-group-item list-group-item-action" id="linkCustomDeck" data-toggle="tooltip" data-placement="right" title="Upload your own deck">Upload Custom Deck</a>
+            <div class="dropdown-divider"></div>
+            <div class='list-group-item list-group-item'>List of Custom Decks</div>
+            <div class="list-group sidenavList" id="customDeckList">
+              <!-- <a href='#' class='list-group-item list-group-item-action list-group-item-dark customDeck' id="">Rider-Waite</a> -->
+            </div>
+          </div>
+          <div class="col-8 center-piece">
+            <div id="loading-div">
+              <div>
+                <h1>Shuffling</h1>
+                <img src="img/loading-png-gif.gif" style="width: 50px;" alt="">
+              </div>
+            </div>        
+            <div class="cards-list"> 
+              <!-- front/back classes are for jquery flip -->              
+              <!-- <div class="col"> position: relative
+                <div class="myCard"> position: absolute
+                  <div class="myCard-Back">
+                    <img class="my-card-img" src="" alt="">
+                  </div>
+                  <div class="myCard-Front">
+                    <img class="my-card-img" src="" alt="">
+                  </div>
+                </div>
+              </div> -->
+              <!-- top 7 cards  -->
+              <div id="top-row" class="row flex-fill">
+              </div>
+              <!-- middle 8 cards -->
+              <div id="middle-row" class="row flex-fill">         
+              </div>
+              <!-- bottom 7 cards  -->
+              <div id="bottom-row" class="row flex-fill">
+              </div>
+            </div>          
+          </div>
+          <div class="col-2 list-group sidenav">
+            <!-- Save Draw -->
+            <a href="#" class="list-group-item list-group-item-action" id="linkSaveDraw"  data-toggle="tooltip" data-placement="left" title="Save drawn cards">SAVE DRAW</a>
+            <a href="#" class="list-group-item list-group-item-action" id="exportQueries" data-toggle="tooltip" data-placement="left" title="Export as an .xml file">Export Saved Queries</a>
+            <a href="#" class="list-group-item list-group-item-action" id="importQueries" data-toggle="tooltip" data-placement="left" title="Import .xml file">Import Queries</a>
+            <li class="dropdown-divider"></li>          
+            <div class='list-group-item list-group-item'>List of Saved Queries</div>
+            <div class="list-group sidenavList" id="SaveList"></div>
+          </div>
+        </main>
+        <footer class="flex-row text-center page-footer">
+          <p>Qbaysan's Major Arcana Tarot Cards Web App</p>
+        </footer>
+      </div>
+      <script src="/js/install.js"></script>
+      <script>
+        // CODELAB: Register service worker.
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((reg) => {
+                  console.log('Service worker registered.', reg);
+                });
+          });
+        }
+    </script>
+  </body>
+</html>

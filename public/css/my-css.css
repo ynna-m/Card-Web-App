@@ -1,0 +1,214 @@
+<style>
+      /* Remove the navbar's default margin-bottom and rounded borders */
+      html{
+        margin:0px auto;
+        min-height: 100%;
+        max-height:100%;
+        width:100%; 
+        /* background-color: aqua;*/
+      }
+      body{
+        /* overflow-y: hidden; */
+        margin:0px auto;
+        min-height: 100%;
+        max-height:100%;
+        height: 100%;
+        width:100%;
+        /* background-color: yellow; */
+      }
+      .container-fluid{
+        /* min-height: 100vh;
+        height:100%; */
+        height: 100vh;
+        min-height: 100%;
+        max-height:100%;
+        width:100%;
+        padding:0px;
+        margin:0px auto;
+        /* background-color: coral; */
+        /* display:flex; d-flex in bootstrap*/
+        /* flex-direction: column; flex-column in bootstrap*/
+      }
+
+      header {
+        margin: 0px;
+        min-height: 12%;
+        width:100%;
+        background-color: rgb(160, 160, 160);
+        padding: 0px !important; 
+      }
+      main{
+        min-height: 80%;
+        margin: 0px;
+        width:100%;
+        flex:auto;
+        /* display:flex; */
+      }
+      footer{
+        margin: 0px;
+        width:100%;        
+        padding: 15px;
+        background-color: #555;
+        color: white;
+        /* height: 70px; */
+      }
+      label{
+        font-weight: bold;
+      }
+      /* Classes */
+      /* .navbar{
+        background-color: lightskyblue;
+      } */
+      .navbar-header{
+        height: 100%;
+        width:100%;
+        margin: 0px;
+        padding: 0px;
+      }
+      
+      .navbar-brand{
+        height:100%;
+        width:100%;
+        text-align: center;
+        padding: 0px !important;
+        margin: 0px !important;
+        line-height: unset !important;
+      }
+      .sidenav {
+        padding: 0px;
+        background-color: #f1f1f1;
+      }
+      .row{
+        margin: 0px auto;
+      }
+      .row > div{
+        padding:10px;
+      }
+      .error{
+        color: red;
+      }
+      input.error {
+        border: 1px dashed red;
+        font-weight: 300;
+        color: red;
+      }
+      textarea.error{
+        border: 1px dashed red;
+        font-weight: 300;
+        color: red;
+      }
+      #loading-div{
+        min-height:100%;
+        min-width:100%;
+        margin:0px auto;
+        background-color:rgb(231, 231, 231);
+        position:absolute;
+        z-index: 1;
+        display: none;
+      }
+      #loading-div > div{
+        position:absolute; 
+        top:50%; 
+        height:10em;
+        width:100%;
+        margin-top:-5em;
+      }      
+      /* My Custom */
+      /* Class */
+      .center-piece{
+        margin: 0px auto;
+        padding: 0px;
+      }
+      .cards-list{
+        margin: 0px auto;
+        padding: 0px;
+        height: 100%;
+        width: 100%;
+        /* background-color: crimson; */
+      }
+      .myCard{
+        width:8vw;
+        height:11vw;
+        margin:0.5vw auto;        
+        position: relative;
+        /* background-color: tomato; */
+      }
+      .myCard-Back,.myCard-Front{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top:0;
+        left:0;
+      }
+      .my-card-img{
+        height:100%;
+        /* display:none; */
+      }
+      /* .myCard-Back{
+        background-color: black;
+        display:none;
+        z-index:1;
+      }
+      .myCard-Front{
+        position: absolute;
+        height: 100%;
+        background-color: beige;
+        z-index:1;
+        display:none;
+      } */
+      .openedCard{
+        width: 8vw;
+        height: 11vw;
+        margin:0.2vw auto;        
+        position: relative;
+      }
+      .cardSaved{
+        width: 8vw;
+        height: 11vw;
+        margin:0.2vw auto;        
+        position: relative;
+      }
+      .sidenavList{
+        overflow-y: auto !important;
+      }
+      /* ID */
+      #Header-Title{
+          font-family: "offenbacherschwabachercatRg";
+          font-size: 4rem;
+      }
+      /* #SaveList{
+        overflow-y: auto;
+      } */
+      @media screen and (max-width: 60em) {
+        body {
+          font-size: 1.5vw !important;
+        }
+        .navbar-brand{
+          font-size: 4vw !important;
+          /* padding: 10px !important; */
+        }
+        .navbar{
+          padding:0px !important;
+        }
+        footer{
+          padding: 0px !important;
+          /* height: 0px; */
+        }
+      }
+      @font-face {
+        font-family: "Dearest_Open";
+        
+        src: url('fonts/dearest_open-webfont.woff2') format('woff2'),
+         url('fonts/dearest_open-webfont.woff') format('woff');
+        
+        }
+      
+        @font-face {
+          font-family: 'offenbacherschwabachercatRg';
+          src: url('fonts/ofenbacherschwabcat-webfont.woff2') format('woff2'),
+              url('fonts/ofenbacherschwabcat-webfont.woff') format('woff');
+          font-weight: normal;
+          font-style: normal;
+
+        }
+    </style>
