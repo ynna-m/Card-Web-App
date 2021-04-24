@@ -93,7 +93,6 @@
         font-weight: 300;
         color: red;
       }
-      
       textarea.error{
         border: 1px dashed red;
         font-weight: 300;
@@ -197,7 +196,7 @@
           /* height: 0px; */
         }
         .list-group-item{
-          padding: 10px !important;
+          padding: 0.8vw !important;
         }
       }
       @font-face {
