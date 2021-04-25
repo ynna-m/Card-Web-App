@@ -7,14 +7,18 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
     <link rel="manifest" href="manifest.json"/>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/toastr.min.css">
     <link rel="stylesheet" href="css/my-css.css">
     <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="jquery/jquery.flip.js"></script>
     <script src="jquery/jquery.validate.min.js"></script>
     <script src="jquery/additional-methods.min.js"></script>
+    <script src="js/toastr.min.js"></script>
     <script src="js/jszip.min.js"></script>
     <script src="js/my-script.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
   </head>
   <body>
      <div class="container-fluid d-flex flex-column">
@@ -212,6 +216,40 @@
                 <button type="button" class="btn btn-primary" id="btnAppendSaveList">Append</button>
                 <button type="button" class="btn btn-danger" id="btnRenewSaveList">Load New</button>
                 <button type="button" class="btn btn-secondary" id="btnCancelImportSaveList" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="reportProblemModal">
+          <!-- Contact Site Owner Here -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Report a Problem</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="message-form">
+                  <div class="row">
+                    <label for="etitle">Title:</label> <br>
+                    <input type="text" class="form-control" id="etitle" name="etitle" min-length="25" required><br>                  
+                  </div>
+                  <div class="row">
+                    <label for="email">Email:</label> <br>
+                    <input type="text" class="form-control" id="email" name="email" required><br>                  
+                  </div>
+                  <div class="row">
+                    <label for="emessage">Message:</label><br>
+                    <textarea class="form-control" rows="4" id="emessage" name="emessage" min-length="200" max-length="2000" required></textarea>                  
+                  </div>
+                  <div class="g-recaptcha brochure__form__captcha" data-sitekey="6LeBbLgaAAAAAHtzVO58rtElfRWpUEgkNCW47YrW"></div>          
+                </form>               
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSendMessage">Send</button>
+                <button type="button" class="btn btn-secondary" id="closeMessage" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
