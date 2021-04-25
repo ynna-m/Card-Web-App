@@ -11,7 +11,7 @@ var importedSaveList = null;
 function initalizeFooter(){
     let year = format(new Date(Date.now()),"yyyy")
     $("footer > p").html("Major Arcana Tarot Cards Web App @"+year+" Qbaysan. <br>For any suggestions, problems or inquiries, " +
-    "<a class='text-light font-underline' id='linkContact' href='#'><u>contact me here.</u></a> ")
+    "<a class='text-light font-underline' target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSeqIil0opeF1o46gPiNWZ5CDltGpOiT4oUDZEHwvmO_CRXz-A/viewform'><u>contact me here.</u></a> ")
 }
 function initializeDeckPattern(){
     curDeck = JSON.parse(localStorage.getItem('curDeck'));
@@ -893,57 +893,6 @@ function saveListImportModal(){
     $("#btnCancelImportSaveList").click(function(){
         importedSaveList = null;
     });
-}
-function linkContactClick(){
-    messageForm = $("#message-form")
-    messageForm.validate({
-        onclick:true,
-        onkeypress:true,
-        rules:{
-            etitle:{
-                required: true,
-                minlength: 10
-            }, 
-            email:{
-                required: true,
-                email: true
-            },
-            emessage:{
-                required: true,
-                minlength: 200,
-                maxlength: 2000
-            }      
-        } 
-    });
-    $("#linkContact").click(function(){
-        $("#reportProblemModal").modal("show");
-    });
-    $('#btnSendMessage').click(function(){
-        if(messageForm.valid()){
-            $form = messageForm;
-            
-            $.ajax({
-                type: "POST",
-                url: 'handler.php',
-                data: $form.serialize(),
-                success: function(){
-                    toastr.success('Message sent.', {timeOut: 3000});
-                    $("#reportProblemModal").modal("hide");
-                },
-                error: function(){
-                    toastr.error('Error sending message', {timeOut: 3000});
-                },
-                dataType: 'json'
-            });
-
-        }
-    });
-    $("#closeMessage").click(function(){
-        $("#etitle").val("");
-        $("#email").val("");
-        $("#emessage").val("");
-    });
-
 }
 $(document).ready(function() {
     deckPattern = {

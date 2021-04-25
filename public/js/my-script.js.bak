@@ -8,10 +8,13 @@ var stitle = null;
 var deckShow = null; //currentDeck to show?
 var deckPattern = {}; //currentDeckPattern blobs
 var importedSaveList = null;
-
+function initalizeFooter(){
+    let year = format(new Date(Date.now()),"yyyy")
+    $("footer > p").html("Major Arcana Tarot Cards Web App @"+year+" Qbaysan. <br>For any suggestions, problems or inquiries, " +
+    "<a class='text-light font-underline' target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSeqIil0opeF1o46gPiNWZ5CDltGpOiT4oUDZEHwvmO_CRXz-A/viewform'><u>contact me here.</u></a> ")
+}
 function initializeDeckPattern(){
     curDeck = JSON.parse(localStorage.getItem('curDeck'));
-    console.log("deckpattern");
 
     if(!curDeck){
         // Create cache of default deck.
@@ -66,16 +69,13 @@ function initializeDeckPattern(){
             $(data).find("a").attr("href", function (i, val) {
                 if( val.match(/\.(txt)$/) ) { 
                     deckTitle = val.split('.').shift();
-                    // console.log(deckTitle);
                 }
             });
             
             for(let i = 0; i<cardHref.length; i++){
                 p=toDataURL(cardNames[i],cardHref[i]);
                 promiseC.push(p);
-                // console.log(promiseC);
             }
-            console.log(promiseC);
             Promise.all(promiseC).then(function(data){
                 let db;
                 let request = indexedDB.open("deck",3);
@@ -88,13 +88,9 @@ function initializeDeckPattern(){
                     let deck = db.createObjectStore('deck', {keypath:"id",autoIncrement: true});
                     deck.createIndex('name','name');
                     deck.createIndex('deckList','deckList');
-                    console.log("here");
-                    console.log(db)
                 }
                 request.onsuccess = function(event) {
                     db = event.target.result;
-                    console.log("here2");
-                    console.log(db);
                     let dataToStore = {name: deckTitle, deckList:deckCacheDefault};
                     let transaction = db.transaction('deck','readwrite');
                     let deckStore = transaction.objectStore('deck');
@@ -107,17 +103,10 @@ function initializeDeckPattern(){
                         var deckShow;
                         deckShowrequest = deckStore.index('name').getKey(deckTitle);
                         deckShowrequest.onsuccess = function(){
-                            console.log("deckshow");
-                            console.log(deckShowrequest.result);
-                            deckShow = deckShowrequest.result;
-  
-                                                                
+                            deckShow = deckShowrequest.result;                                                    
                             localStorage.setItem("curDeck",JSON.stringify(deckShow));
-                            
-            
+                        
                             test = JSON.parse(localStorage.getItem("curDeck"));
-                            console.log(test);
-                            console.log(typeof(test));
     
                             initializeDeckPattern();
     
@@ -132,8 +121,6 @@ function initializeDeckPattern(){
                 }
                
             });
-            
-            // console.log(deckCacheDefault);
         });   
     }
     else{
@@ -156,28 +143,20 @@ function initializeDeckPattern(){
             
             // let query = deckStore.get(curDeck);
             let query = deckStore.getAllKeys()
-            console.log("currentDeckinelseInitialize")
-            console.log(curDeck);
+
             query.onsuccess = function(event){
-                console.log(event.target.result)
                 let idlist = event.target.result
                 let countRequest = deckStore.count();
                 countRequest.onsuccess = function() {
-                    console.log("count")
-                    console.log(countRequest.result);
                     stringAppend = "";
 
                     let getAllDeckNames = deckStore.getAll()
                     getAllDeckNames.onsuccess = function(event){
-                        console.log("decknames")
-                        console.log(event)
-                        console.log(event.target.result)
                         for(let i = 0;i<countRequest.result;i++){
                             let appendString = "<a href='#' class='list-group-item list-group-item-action "+ 
                             "list-group-item-dark customDeck' id='"+idlist[i]+"'>"+
                             event.target.result[i].name+"</a>";
                             stringAppend+=appendString;
-                            console.log(event.target.result[i].name)
                         }
                         $("#customDeckList").html("");
                         $("#customDeckList").html(stringAppend);
@@ -186,7 +165,6 @@ function initializeDeckPattern(){
 
                     let getDeckDB = deckStore.get(parseInt(curDeck));
                     getDeckDB.onsuccess = function(data){
-                        console.log(data.target.source.deckList)
                         deckPattern.setDeckPattern = data.target.result.deckList;
                         deckShow=curDeck;
                     }
@@ -201,8 +179,6 @@ function initializeDeckPattern(){
 
 function initializeSaveList(){
     sidSaved = JSON.parse(localStorage.getItem("idSave"));
-    console.log("initializesavelist")
-    console.log(sidSaved);
     if(sidSaved){
         sidSaved = sidSaved.map(Number);
     }
@@ -210,7 +186,6 @@ function initializeSaveList(){
     stitle = JSON.parse(localStorage.getItem("title"));
     sfquestion = JSON.parse(localStorage.getItem("fquestion"));
     ssaveCardArray = JSON.parse(localStorage.getItem("saveCardArray"));
-    console.log(ssaveCardArray)
     stringAppend = "";
     if(sidSaved){
         for(let i = 0; i < sidSaved.length; i++){
@@ -246,7 +221,7 @@ function shuffleCards(){
         cards[i] = cards[j];
         cards[j] = temp;
     }
-    // console.log(cards)
+
     return cards;
 }
 function distributeCards(){
@@ -320,12 +295,9 @@ function cardFlip(){
     });
 }
 function cardFlipEvent(event){
-    console.log("cardState:");
-    console.log(cardsFlippedAll);
     if(!(cardsFlippedAll||cardsOpened.includes(event.id))){
         cardsOpened.push(event.id)
     }
-    console.log(cardsOpened);
 }
 function cardFlipAll(){
     myCard = $(".myCard");
@@ -333,7 +305,6 @@ function cardFlipAll(){
         flippedCards = 0;
         myCard.each(function(){
             if(!$(this).data("flip-model")){
-                console.log($(this).data("flip-model"))
                 $(this).flip();
                 $(this).flip(true);
                 flippedCards++;
@@ -353,7 +324,6 @@ function cardFlipAll(){
                 cardsOpened = []
             }
         }
-        console.log(flippedCards);
     });
 }
 // 04/07/2021 add
@@ -362,7 +332,6 @@ function saveListClickItem(){
     mySavedItem.each(function(){
         $(this).click(function(){
             getSaveId = $(this).attr("id");
-            console.log(getSaveId);
             index = sidSaved.indexOf(parseInt(getSaveId));
 
             mtitle = stitle[index];
@@ -417,7 +386,6 @@ function saveListClickItem(){
             $('#smiddle').html(stringMidRow);
             $('#sbottom').html(stringBotRow);
 
-            console.log(index);
             $('#savedQueryModal').modal('show');
         });
     });
@@ -428,9 +396,6 @@ function saveListClickItem(){
         toprow = $('#stop').html();
         midrow = $('#smiddle').html();
         bottomrow = $('#sbottom').html();
-
-        console.log(saveEditID);
-        console.log(saveEditID);
 
         $('#title').val("");
         $('#fquestion').val("");
@@ -531,13 +496,9 @@ function saveModalDrawSaveClick(){
     formSave = $("#validate-form")
     formSave.validate({
         onclick: true,
-        onkeypress: true,
-        onsubmit:true
+        onkeypress: true
     });
-    formSave.validate();
     $("#btnSaveDraw").click(function(event){
-        formSave.submit();
-        console.log(formSave.valid())
         if(formSave.valid()){
             gettitle = $("#title").val();
             getfquestion = $("#fquestion").val();
@@ -548,14 +509,12 @@ function saveModalDrawSaveClick(){
             cfquestion = JSON.parse(localStorage.getItem("fquestion"));
             csaveCardArray = JSON.parse(localStorage.getItem("saveCardArray"));
 
-            console.log(saveEditID);
             //If none, create, else append data,
             if(saveEditID>-1){
                 index = cidSaved.indexOf(parseInt(saveEditID));
                 ctitle[index] = gettitle;
                 cfquestion[index] = getfquestion;
 
-                console.log(index);
                 localStorage.setItem("title",JSON.stringify(ctitle));
                 localStorage.setItem("fquestion",JSON.stringify(cfquestion));
                 
@@ -569,7 +528,6 @@ function saveModalDrawSaveClick(){
                 $('#saveDrawModal').modal('hide');
             }
             else if(!cidSaved){
-                console.log("if cache has nothing")
                 cidSaved = [0];
                 ctitle = [gettitle];
                 cfquestion = [getfquestion];
@@ -587,12 +545,8 @@ function saveModalDrawSaveClick(){
                 $('#reshuffleModalWarningAfterSave').modal('show');
 
                 test = JSON.parse(localStorage.getItem("saveCardArray"));
-                console.log(test);
-                console.log(typeof(test));
             }
             else{
-                console.log("here if cache has something");
-
                 tidSaved = parseInt(cidSaved[cidSaved.length - 1]) + 1;
                 cidSaved.push(tidSaved);
                 ctitle.push(gettitle);
@@ -610,11 +564,8 @@ function saveModalDrawSaveClick(){
                 $('#reshuffleModalWarningAfterSave').modal('show');
 
                 test = JSON.parse(localStorage.getItem("saveCardArray"));
-                console.log(test);
-                console.log(typeof(test));
             }
             //then setStorage
-            // console.log(testList)
             initializeSaveList();
             saveListClickItem();
         }
@@ -635,21 +586,17 @@ function zipFunc(){
         }
         return JSZip.loadAsync(el)                                   // 1) read the Blob
         .then(function(zip) {
-            console.log("loading zip")         
-            console.log(zip)
             let checkFiles=[];
             //Preliminary check to see if files inside have the right names
             zip.forEach(function(relativePath,zipEntry){
                 checkFiles.push(zipEntry.name.split('.').shift())
             });
-            console.log(checkFiles);
             if(checkFiles.length<23){
                 $("#uploadWarning").html("The files inside the zip archive don't contain the right number of images. Please upload a different zip");
                 // $("#uploadWarningModal").modal("show");
                 // $('#uploadDeckModal').modal("hide");
                 $("#btnUpload").html("Upload");
                 $("#btnUpload").attr("disabled", false);
-                console.log("length");
                 message.setVal = false
                 // return false;
             }
@@ -662,8 +609,7 @@ function zipFunc(){
                         // $('#uploadDeckModal').modal("hide");
                         $("#btnUpload").html("Upload");
                         $("#btnUpload").attr("disabled", false);
-                        console.log("checking array");
-                        console.log(checkFiles[i])
+
                         message.setVal = false;
                         checkpass=false;
                         // return false;
@@ -680,6 +626,8 @@ function zipFunc(){
     }
     
     form.validate({
+        onkeypress:true,
+        onclick:true,
         focusInvalid:true,
         onsubmit:true,
         rules:{
@@ -702,7 +650,6 @@ function zipFunc(){
         }
     }
     jQuery.validator.addMethod("deckUpload",function(val,el){
-        console.log(message.getVal)
         if(message.getVal==null){
             return true;
         }
@@ -724,8 +671,7 @@ function zipFunc(){
         validateUpload($("#deckUpload")[0].files[0])
     })
     $("#btnUpload").on("click", function(evt) {
-        if(form.valid()&&message.getVal==true){
-            console.log("upload test");                 
+        if(form.valid()&&message.getVal==true){   
             // $("#deckUpload").val("");
             $("#btnUpload").attr("disabled", true);
             stringBtnChange ="<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>"+
@@ -754,9 +700,7 @@ function zipFunc(){
                 var deckName = $('#deckName').val(); 
                 var promises= [];
                 JSZip.loadAsync(f)                                   
-                    .then(function(zip) {
-                        console.log("loading zip")         
-                        console.log(zip)                        
+                    .then(function(zip) {             
                         //Continue if it passes checks
                         zip.forEach(function (relativePath, zipEntry) { 
                              promises.push(zipEntry.async("base64")
@@ -775,7 +719,6 @@ function zipFunc(){
                         //db upload here
                         Promise.all(promises).then(function(){
                             let data = {name: deckName, deckList:deckList};
-                            console.log(data);
                             transaction = db.transaction("deck","readwrite");
                             deckStore = transaction.objectStore('deck');
                             request = deckStore.add(data);
@@ -784,20 +727,15 @@ function zipFunc(){
                                 var deckShow;
                                 deckShowrequest = deckStore.index('name').getKey(deckName);
                                 deckShowrequest.onsuccess = function(){
-                                    console.log("deckshow");
-                                    console.log(deckShowrequest.result);
                                     deckShow = deckShowrequest.result;
                                     cCurrentDeck = JSON.parse(localStorage.getItem("curDeck"));
 
-                                    console.log("if cache has nothing")
                                     cCurrentDeck = deckShow;
                                                                         
                                     localStorage.setItem("curDeck",JSON.stringify(cCurrentDeck));
                                     
                     
                                     test = JSON.parse(localStorage.getItem("curDeck"));
-                                    console.log(test);
-                                    console.log(typeof(test));
 
                                     initializeDeckPattern();
                                 }                                
@@ -831,8 +769,7 @@ function deckListClickItem(){
     myDeckListItem.each(function(){
         $(this).click(function(){
             getDeckId = $(this).attr("id");
-            console.log("decklistclick");
-            console.log(getDeckId);
+
             localStorage.setItem("curDeck",JSON.stringify(getDeckId));
             initializeDeckPattern();
         });
@@ -876,8 +813,6 @@ function exportSaveQueries(){
         var date = format(new Date(Date.now()),"MMddyyyy_hhmmss")
         exportData = JSON.stringify(exportList);
         exportfilename = "queries_"+date+".json";
-        console.log(exportData);
-        console.log(exportfilename);
         exportfile='data:application/json;charset=utf-8,'+ encodeURIComponent(exportData)
         
         var a = document.createElement("a");
@@ -900,13 +835,10 @@ function importSaveQueries(){
             var filereader = new FileReader();
             filereader.onload = function(file){
                 var content = file.target.result;
-                // console.log(content);
                 importedSaveList = JSON.parse(content); // Array of Objects.
-                console.log("importedSaveList");
-                console.log(importedSaveList); // You can index every object
+
                 $("#saveListImportModal").modal('show');
             }
-            // console.log(inputfile)
             filereader.readAsText(inputfile.target.files[0])
         };
     });
@@ -923,18 +855,12 @@ function saveListImportModal(){
         }
         else{
             for(let i = 0; i<idToIterate.length;i++){
-                // console.log("imported save list for loop")
                 idToSave = iidSave[iidSave.length-1]+1
                 iidSave.push(idToSave);
                 ititle.push(importedSaveList[i].title);
                 iquestion.push(importedSaveList[i].question);
                 icardArray.push(importedSaveList[i].cards)
             }
-            console.log(iidSave);
-            console.log(ititle);
-            console.log(iquestion);
-            console.log(icardArray);
-    
             localStorage.setItem("idSave",JSON.stringify(iidSave));
             localStorage.setItem("title",JSON.stringify(ititle));
             localStorage.setItem("fquestion",JSON.stringify(iquestion));
@@ -951,15 +877,10 @@ function saveListImportModal(){
         let iquestion = [];
         let icardArray = [];
         for(let i = 0; i<iidSave.length;i++){
-            // console.log("imported save list for loop")
             ititle.push(importedSaveList[i].title);
             iquestion.push(importedSaveList[i].question);
             icardArray.push(importedSaveList[i].cards)
         }
-        console.log(iidSave);
-        console.log(ititle);
-        console.log(iquestion);
-        console.log(icardArray);
         localStorage.setItem("idSave",JSON.stringify(iidSave));
         localStorage.setItem("title",JSON.stringify(ititle));
         localStorage.setItem("fquestion",JSON.stringify(iquestion));
@@ -973,12 +894,62 @@ function saveListImportModal(){
         importedSaveList = null;
     });
 }
+function linkContactClick(){
+    messageForm = $("#message-form")
+    messageForm.validate({
+        onclick:true,
+        onkeypress:true,
+        rules:{
+            etitle:{
+                required: true,
+                minlength: 10
+            }, 
+            email:{
+                required: true,
+                email: true
+            },
+            emessage:{
+                required: true,
+                minlength: 200,
+                maxlength: 2000
+            }      
+        } 
+    });
+    $("#linkContact").click(function(){
+        $("#reportProblemModal").modal("show");
+    });
+    $('#btnSendMessage').click(function(){
+        if(messageForm.valid()){
+            $form = messageForm;
+            
+            $.ajax({
+                type: "POST",
+                url: 'handler.php',
+                data: $form.serialize(),
+                success: function(){
+                    $("#reportProblemModal").modal("hide");
+                    toastr.success('Message sent.', {timeOut: 3000});
+                },
+                error: function(e){
+                    toastr.error('Error sending message', {timeOut: 3000});
+                    console.log("error sending message. Message: " + e)
+                },
+                dataType: 'json'
+            });
+
+        }
+    });
+    $("#closeMessage").click(function(){
+        $("#etitle").val("");
+        $("#email").val("");
+        $("#emessage").val("");
+    });
+
+}
 $(document).ready(function() {
-    console.log(deckPattern)
     deckPattern = {
         value: null,
         process() {
-            console.log(`The variable has changed to ${this.getDeckPattern}`);
             distributeCards();
             cardFlip();
             cardFlipAll();
@@ -993,7 +964,6 @@ $(document).ready(function() {
           this.process();
         }
       };
-    console.log(deckPattern)
     initializeDeckPattern();
     
     reShuffleClick();
@@ -1005,4 +975,7 @@ $(document).ready(function() {
     exportSaveQueries();
     importSaveQueries();
     saveListImportModal();
+
+    initalizeFooter();
+    linkContactClick();
 });
