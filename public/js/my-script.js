@@ -8,7 +8,10 @@ var stitle = null;
 var deckShow = null; //currentDeck to show?
 var deckPattern = {}; //currentDeckPattern blobs
 var importedSaveList = null;
-
+function initalizeFooter(){
+    let year = format(new Date(Date.now()),"yyyy")
+    $("footer > p").html("Major Arcana Tarot Cards Web App @"+year+" Qbaysan")
+}
 function initializeDeckPattern(){
     curDeck = JSON.parse(localStorage.getItem('curDeck'));
 
@@ -917,4 +920,6 @@ $(document).ready(function() {
     exportSaveQueries();
     importSaveQueries();
     saveListImportModal();
+
+    initalizeFooter();
 });

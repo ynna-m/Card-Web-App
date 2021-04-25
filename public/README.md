@@ -1,2 +1,0 @@
-# MATarot
-Tarot Cards
