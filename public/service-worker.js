@@ -15,16 +15,23 @@ const DATA_CACHE_NAME = 'data-cache-v1';
 // ];
 const FILES_TO_CACHE = [
   '/',
-  '/index.html',
-  '/css/bootstrap.min.css',
-  '/css/my-css.css',
-  '/js/jquery-3.6.0.min.js',
-  '/js/bootstrap.bundle.min.js',
-  '/jquery/jquery.flip.js',
-  '/jquery/jquery.validate.min.js',
-  '/jquery/additional-methods.min.js',
-  '/js/jszip.min.js',
-  '/js/my-script.js',
+  'index.html',
+  'js/install.js',
+  'css/bootstrap.min.css',
+  'css/bootstrap.min.css.map',
+  'css/toastr.min.css',
+  'css/my-css.css',
+  'js/jquery-3.6.0.min.js',
+  'js/bootstrap.min.js',
+  'js/bootstrap.min.js.map',
+  'js/bootstrap.bundle.min.js',
+  'js/bootstrap.bundle.min.js.map',
+  'jquery/jquery.flip.js',
+  'jquery/jquery.validate.min.js',
+  'jquery/additional-methods.min.js',
+  'js/jszip.min.js',
+  'js/toastr.js',
+  'js/my-script.js',
 ];
 
 self.addEventListener('install', (evt) => {

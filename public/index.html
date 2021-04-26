@@ -15,10 +15,9 @@
     <script src="jquery/jquery.flip.js"></script>
     <script src="jquery/jquery.validate.min.js"></script>
     <script src="jquery/additional-methods.min.js"></script>
-    <script src="js/toastr.min.js"></script>
     <script src="js/jszip.min.js"></script>
+    <script src="js/toastr.js"></script>
     <script src="js/my-script.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
   </head>
   <body>
      <div class="container-fluid d-flex flex-column">
@@ -161,9 +160,9 @@
                     <input type="text" class="form-control" name="deckName" id="deckName" min-length="1" required> <br> <br>
                     <label for="deckUpload" class="form-label">File: </label>
                     <input type="file" class="form-control-file deckUpload" id="deckUpload" name="deckUpload" accept="zip" required/><br />
-                    <small>Note: The file uploaded must be a zip file. 
+                    <small>Note: The file uploaded must be a <b>.zip</b> file, and the files inside must either only be any of three: <b>.jpg, .gif or .png.</b> <br>
                       And the <b>cards</b> should be named <b> 0000, 0001, 0002,</b> etc. based on the tarot order. So The Fool is <b>0000</b>,
-                    The Magician is <b>0001</b>, and so on. As for the back face of the card, name it <b>cardBack</b>.
+                    The Magician is <b>0001</b>, and so on, until The World, which is 0021. 0022 and above won't work. As for the back face of the card, name it <b>cardBack</b>.
                     </small>
                   </form>
                   <div class="card-area">
@@ -179,25 +178,7 @@
             </div>
           </div>
         </div>
-        <div class="modal fade" tabindex="-1" role="dialog" id="uploadWarningModal">
-          <!-- Warning prompt if user wants to clear or append savelist -->
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Warning</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p id="uploadWarning"></p>             
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        
         <div class="modal fade" tabindex="-1" role="dialog" id="saveListImportModal">
           <!-- Warning prompt if user wants to clear or append savelist -->
           <div class="modal-dialog" role="document">
@@ -220,6 +201,70 @@
             </div>
           </div>
         </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="clearListModal">
+          <!-- clearing save list modal -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Do you want to clear the save list? <br>
+                  <small><b>(Warning: this will clear the list).</b> It is recommended to back up your save list first using the import function before clearing
+                  the list.</small>
+                </p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnClearList">Clear</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="clearDeckListModal">
+          <!-- clearing Deck list modal -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Do you want to clear the deck list? <br>
+                  <small><b>(Warning: this will clear the list).</b> It is recommended to keep a copy of a .zip file of your deck with you.</small>
+                </p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnClearDeckList">Clear</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="promptsModal">
+          <!-- Other prompts purposes -->
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p></p>             
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Body -->
         <header class="flex-row d-flex navbar">
             <div class="navbar-header " >
@@ -231,8 +276,8 @@
             <a href="#" class="list-group-item list-group-item-action" id="butInstall" aria-label="Install" data-toggle="tooltip" data-placement="right" title="Install" hidden>Install App</a>
             <a href="#" class="list-group-item list-group-item-action" id="linkReshuffle" data-toggle="tooltip" data-placement="right" title="Reshuffle cards">Reshuffle</a>
             <a href="#" class="list-group-item list-group-item-action"  id="linkFlipAll" data-toggle="tooltip" data-placement="right" title="Flips all cards">Flip All Cards</a>
-            <a href="#" class="list-group-item list-group-item-action" target="_blank" data-toggle="tooltip" data-placement="right" title="Opens a new tab">New Session</a>
             <a href="#" class="list-group-item list-group-item-action" id="linkCustomDeck" data-toggle="tooltip" data-placement="right" title="Upload your own deck">Upload Custom Deck</a>
+            <a href="#" class="list-group-item list-group-item-action" id="clearCustomDecks" data-toggle="tooltip" data-placement="right" title="Clear the decklist except the default deck">Clear Deck List</a>
             <div class="dropdown-divider"></div>
             <div class='list-group-item list-group-item'>List of Custom Decks</div>
             <div class="list-group sidenavList" id="customDeckList">
@@ -272,8 +317,9 @@
           <div class="col-2 list-group sidenav">
             <!-- Save Draw -->
             <a href="#" class="list-group-item list-group-item-action" id="linkSaveDraw"  data-toggle="tooltip" data-placement="left" title="Save drawn cards">SAVE DRAW</a>
-            <a href="#" class="list-group-item list-group-item-action" id="exportQueries" data-toggle="tooltip" data-placement="left" title="Export as an .xml file">Export Saved Queries</a>
-            <a href="#" class="list-group-item list-group-item-action" id="importQueries" data-toggle="tooltip" data-placement="left" title="Import .xml file">Import Queries</a>
+            <a href="#" class="list-group-item list-group-item-action" id="exportQueries" data-toggle="tooltip" data-placement="left" title="Export as an .json file">Export Saved Queries</a>
+            <a href="#" class="list-group-item list-group-item-action" id="importQueries" data-toggle="tooltip" data-placement="left" title="Import .json file">Import Queries</a>
+            <a href="#" class="list-group-item list-group-item-action" id="clearList" data-toggle="tooltip" data-placement="left" title="This will clear the save list">Clear List</a>
             <li class="dropdown-divider"></li>          
             <div class='list-group-item list-group-item'>List of Saved Queries</div>
             <div class="list-group sidenavList" id="SaveList"></div>
@@ -288,7 +334,7 @@
         // CODELAB: Register service worker.
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
+            navigator.serviceWorker.register('service-worker.js')
                 .then((reg) => {
                   console.log('Service worker registered.', reg);
                 });

@@ -10,11 +10,11 @@ var deckPattern = {}; //currentDeckPattern blobs
 var importedSaveList = null;
 function initalizeFooter(){
     let year = format(new Date(Date.now()),"yyyy")
-    $("footer > p").html("Major Arcana Tarot Cards Web App @"+year+" Qbaysan. <br>For any suggestions, problems or inquiries, " +
+    $("footer > p").html("Major Arcana Tarot Cards Web App @"+year+". <br>For any suggestions, problems or inquiries, " +
     "<a class='text-light font-underline' target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSeqIil0opeF1o46gPiNWZ5CDltGpOiT4oUDZEHwvmO_CRXz-A/viewform'><u>contact me here.</u></a> ")
 }
 function initializeDeckPattern(){
-    curDeck = JSON.parse(localStorage.getItem('curDeck'));
+    let curDeck = JSON.parse(localStorage.getItem('curDeck'));
 
     if(!curDeck){
         // Create cache of default deck.
@@ -178,6 +178,7 @@ function initializeDeckPattern(){
 }
 
 function initializeSaveList(){
+    $("#SaveList").html("");
     sidSaved = JSON.parse(localStorage.getItem("idSave"));
     if(sidSaved){
         sidSaved = sidSaved.map(Number);
@@ -346,27 +347,30 @@ function saveListClickItem(){
             stringBotRow = "";
             for(let i = 0; i < mcards.length; i++){
                 if(i < 5){
-                    let appendString = "<div class='cardSaved justify-content-center' id='"+mcards[i]+"'>\n"+    
-                            "<div class='myCard-Front justify-content-center'>\n"+
+                    let appendString = "<div class='cardSaved justify-content-center d-flex flex-column text-center' id='"+mcards[i]+"'>\n"+    
+                            "<div class='myCard-Front'>\n"+
                                 "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(mcards[i])+"'>\n"+
                             "</div>\n"+
+                            "<div class='bottomtextcard'>"+(i+1).toString()+"</div>\n"+
                             "</div>\n";
                     stringTopRow+=appendString;
                     
                 }
                 else if(i >= 5 && i < 15){
-                    let appendString = "<div class='cardSaved justify-content-center' id='"+mcards[i]+"'>\n"+    
-                            "<div class='myCard-Front justify-content-center'>\n"+
+                    let appendString = "<div class='cardSaved justify-content-center d-flex flex-column text-center' id='"+mcards[i]+"'>\n"+    
+                            "<div class='myCard-Front'>\n"+
                                 "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(mcards[i])+"'>\n"+
                             "</div>\n"+
+                            "<div class='bottomtextcard'>"+(i+1).toString()+"</div>\n"+
                             "</div>\n";
                     stringMidRow+=appendString;
                 }
                 else if(i >= 15 && i < 22){
-                    let appendString = "<div class='cardSaved justify-content-center' id='"+mcards[i]+"'>\n"+    
-                            "<div class='myCard-Front justify-content-center'>\n"+
+                    let appendString = "<div class='cardSaved justify-content-center d-flex flex-column text-center' id='"+mcards[i]+"'>\n"+    
+                            "<div class='myCard-Front'>\n"+
                                 "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(mcards[i])+"'>\n"+
                             "</div>\n"+
+                            "<div class='bottomtextcard'>"+(i+1).toString()+"</div>\n"+
                             "</div>\n";
                     stringBotRow+=appendString;
                 }
@@ -460,27 +464,30 @@ function saveModalPopulate(){
     stringBotRow="";
     for(let i = 0; i < cardsOpened.length; i++){
         if(i < 5){
-            let appendString = "<div class='openedCard justify-content-center' id='"+cardsOpened[i]+"'>\n"+                        
-                    "<div class='myCard-Front back justify-content-center'>\n"+
-                        "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(cardsOpened[i])+"'>\n"+
-                    "</div>\n"+
+            let appendString = "<div class='cardSaved justify-content-center d-flex flex-column text-center' id='"+cardsOpened[i]+"'>\n"+    
+                        "<div class='myCard-Front'>\n"+
+                            "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(cardsOpened[i])+"'>\n"+
+                        "</div>\n"+
+                        "<div class='bottomtextcard'>"+(i+1).toString()+"</div>"+
                     "</div>\n";
             stringTopRow+=appendString;
             
         }
         else if(i >= 5 && i < 15){
-            let appendString = "<div class='openedCard justify-content-center' id='"+cardsOpened[i]+"'>\n"+                        
-                    "<div class='myCard-Front back justify-content-center'>\n"+
-                        "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(cardsOpened[i])+"'>\n"+
-                    "</div>\n"+
+            let appendString = "<div class='cardSaved justify-content-center d-flex flex-column text-center' id='"+cardsOpened[i]+"'>\n"+    
+                        "<div class='myCard-Front'>\n"+
+                            "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(cardsOpened[i])+"'>\n"+
+                        "</div>\n"+
+                        "<div class='bottomtextcard'>"+(i+1).toString()+"</div>"+
                     "</div>\n";
             stringMidRow+=appendString;
         }
         else if(i >= 15 && i < 22){
-            let appendString = "<div class='openedCard justify-content-center' id='"+cardsOpened[i]+"'>\n"+                        
-                    "<div class='myCard-Front back justify-content-center'>\n"+
-                        "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(cardsOpened[i])+"'>\n"+
-                    "</div>\n"+
+            let appendString = "<div class='cardSaved justify-content-center d-flex flex-column text-center' id='"+cardsOpened[i]+"'>\n"+    
+                        "<div class='myCard-Front'>\n"+
+                            "<img class='my-card-img' src='"+deckPattern.getDeckPattern.get(cardsOpened[i])+"'>\n"+
+                        "</div>\n"+
+                        "<div class='bottomtextcard'>"+(i+1).toString()+"</div>"+
                     "</div>\n";
             stringBotRow+=appendString;
         }
@@ -526,6 +533,7 @@ function saveModalDrawSaveClick(){
                 $("#bottom-save").html("");
 
                 $('#saveDrawModal').modal('hide');
+                toastr.success("Successfully edited query.");                
             }
             else if(!cidSaved){
                 cidSaved = [0];
@@ -545,6 +553,7 @@ function saveModalDrawSaveClick(){
                 $('#reshuffleModalWarningAfterSave').modal('show');
 
                 test = JSON.parse(localStorage.getItem("saveCardArray"));
+                toastr.success("Saved query.");
             }
             else{
                 tidSaved = parseInt(cidSaved[cidSaved.length - 1]) + 1;
@@ -564,6 +573,7 @@ function saveModalDrawSaveClick(){
                 $('#reshuffleModalWarningAfterSave').modal('show');
 
                 test = JSON.parse(localStorage.getItem("saveCardArray"));
+                toastr.success("Saved query.");
             }
             //then setStorage
             initializeSaveList();
@@ -589,12 +599,9 @@ function zipFunc(){
             let checkFiles=[];
             //Preliminary check to see if files inside have the right names
             zip.forEach(function(relativePath,zipEntry){
-                checkFiles.push(zipEntry.name.split('.').shift())
+                checkFiles.push(zipEntry.name)
             });
             if(checkFiles.length<23){
-                $("#uploadWarning").html("The files inside the zip archive don't contain the right number of images. Please upload a different zip");
-                // $("#uploadWarningModal").modal("show");
-                // $('#uploadDeckModal').modal("hide");
                 $("#btnUpload").html("Upload");
                 $("#btnUpload").attr("disabled", false);
                 message.setVal = false
@@ -602,11 +609,8 @@ function zipFunc(){
             }
             else{
                 let checkpass=null;
-                for(let i=0;i<checkFiles.length;i++){                            
-                    if(!checkFiles[i].match(/^0{2,3}[0-1][0-9]$|^0{2,3}[0-2][0-1]$|^cardBack$/)){
-                        $("#uploadWarning").html("Invalid file names. Please upload a different zip");
-                        // $("#uploadWarningModal").modal("show");
-                        // $('#uploadDeckModal').modal("hide");
+                for(let i=0;i<checkFiles.length;i++){   
+                    if(!checkFiles[i].match(/(^0{2,3}[0-1][0-9]|^0{2,3}[0-2][0-1]|^cardBack)\.(gif|jpe?g|png)$/)){
                         $("#btnUpload").html("Upload");
                         $("#btnUpload").attr("disabled", false);
 
@@ -723,7 +727,6 @@ function zipFunc(){
                             deckStore = transaction.objectStore('deck');
                             request = deckStore.add(data);
                             request.onsuccess = function() {
-                                // Clear the form, ready for adding the next entry
                                 var deckShow;
                                 deckShowrequest = deckStore.index('name').getKey(deckName);
                                 deckShowrequest.onsuccess = function(){
@@ -744,6 +747,8 @@ function zipFunc(){
                                 $('#uploadDeckModal').modal("hide")
                                 $("#btnUpload").html("Upload");
                                 $("#btnUpload").attr("disabled", false);
+                                toastr.success("Added custom deck.");
+                                
                             };
                             transaction.oncomplete = function() {
                                 console.log('Transaction completed: database modification finished.');
@@ -868,6 +873,7 @@ function saveListImportModal(){
             initializeSaveList();
             saveListClickItem();
             $('#saveListImportModal').modal('hide');
+            toastr.success("Appended save queries list");
         }
         
     });
@@ -889,9 +895,123 @@ function saveListImportModal(){
         initializeSaveList();
         saveListClickItem();
         $('#saveListImportModal').modal('hide');
+        toastr.success("Loaded save queries list");
     });
     $("#btnCancelImportSaveList").click(function(){
         importedSaveList = null;
+    });
+}
+function clearListModal(){
+    $("#clearList").click(function(){
+        let idSavecheck = JSON.parse(localStorage.getItem('idSave'))
+        if(!idSavecheck){
+            $("#promptsModal").find(".modal-body > p").html("There is no saved queries to clear.")
+            $("#promptsModal").find(".modal-title").html("Notice")
+            $("#promptsModal").modal("show");
+        }
+        else{
+            $("#clearListModal").modal('show');
+        }
+        
+    });
+    $("#btnClearList").click(function(){
+            localStorage.removeItem("idSave");
+            localStorage.removeItem("title");
+            localStorage.removeItem("fquestion");
+            localStorage.removeItem("saveCardArray");
+
+            sfquestion = null;
+            ssaveCardArray = null;
+            sidSaved = null;
+            stitle = null;
+            
+            initializeSaveList();
+            saveListClickItem();
+
+            $("#clearListModal").modal('hide');
+            toastr.success('Deleted saved query list.')      
+    });
+}
+function clearDeckListModal(){
+    $("#clearCustomDecks").click(function(){
+        let db;
+        let request = indexedDB.open("deck",3);
+        request.onupgradeneeded = function(event) {
+            // Set the db variable to our database so we can use it!  
+            db = event.target.result;
+        
+            // Create an object store named notes. Object stores
+            // in databases are where data are stored.
+            let deck = db.createObjectStore('deck', {keypath:"id",autoIncrement: true});
+            deck.createIndex('name','name');
+            deck.createIndex('deckList','deckList');
+        }
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            let transaction = db.transaction('deck','readonly');
+            let deckStore = transaction.objectStore('deck');
+            
+            // let query = deckStore.get(curDeck);
+            let query = deckStore.getAllKeys()
+
+            query.onsuccess = function(event){
+                let idlist = event.target.result
+                let countRequest = deckStore.count();
+                countRequest.onsuccess = function() {
+                    stringAppend = "";
+                    if(countRequest.result<=1){
+                        $("#promptsModal").find(".modal-body > p").html("There is no custom decks to clear.")
+                        $("#promptsModal").find(".modal-title").html("Notice")
+                        $("#promptsModal").modal("show");
+                        db.close();
+                    }
+                    else{
+                        $("#clearDeckListModal").modal("show");
+                        db.close()                        
+                    }
+                }
+            }  
+        }
+        request.onerror = function(event) {
+            alert('error opening database ' + event.target.errorCode);
+        } 
+    });
+    $("#btnClearDeckList").click(function(){
+        let db;
+        let request = indexedDB.open("deck",3);
+        request.onupgradeneeded = function(event) {
+            // Set the db variable to our database so we can use it!  
+            db = event.target.result;
+        
+            let deck = db.createObjectStore('deck', {keypath:"id",autoIncrement: true});
+            deck.createIndex('name','name');
+            deck.createIndex('deckList','deckList');
+        }
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            let transaction = db.transaction('deck','readwrite');
+            let deckStore = transaction.objectStore('deck');
+            
+            // let query = deckStore.get(curDeck);
+            let query = deckStore.clear()
+
+            query.onsuccess = function(event){                    
+                    localStorage.removeItem('curDeck');
+                    deckShow = null;
+                    deckPattern.setVal = null;
+                    initializeDeckPattern();
+                    $("#clearDeckListModal").modal("hide");
+                    toastr.success("Successfully cleared the list");
+                    db.close();
+                }
+            query.onerror = function(event){                
+                toastr.error("There was an error trying to clear the list");
+                db.close();
+            }
+        }
+        request.onerror = function(event) {
+            alert('error opening database ' + event.target.errorCode);
+        } 
     });
 }
 $(document).ready(function() {
@@ -910,6 +1030,9 @@ $(document).ready(function() {
         set setDeckPattern(value) {
           this.value = value;
           this.process();
+        },
+        set setVal(value) {
+            this.value = value;
         }
       };
     initializeDeckPattern();
@@ -923,7 +1046,8 @@ $(document).ready(function() {
     exportSaveQueries();
     importSaveQueries();
     saveListImportModal();
+    clearListModal();
+    clearDeckListModal();
 
     initalizeFooter();
-    linkContactClick();
 });
