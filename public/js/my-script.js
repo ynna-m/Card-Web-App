@@ -14,10 +14,12 @@ function initalizeFooter(){
     "<a class='text-light font-underline' target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSeqIil0opeF1o46gPiNWZ5CDltGpOiT4oUDZEHwvmO_CRXz-A/viewform'><u>contact me here.</u></a> ")
 }
 function initializeDeckPattern(){
+    //Initializes Deck Skin Pattern.
     let curDeck = JSON.parse(localStorage.getItem('curDeck'));
 
     if(!curDeck){
-        // Create cache of default deck.
+        // If no current deck exists. Create cache of default deck, which is Rider-Waite from img folder
+        // Should be edited in the future to allow webadmin to add their own custom decks for other people to use.
         var folder = "./img/cards/";
         var deckTitle;
         var cardHref = [];
@@ -124,6 +126,7 @@ function initializeDeckPattern(){
         });   
     }
     else{
+        // If a current deck exists, load it.
         let db;
         let request = indexedDB.open("deck",3);
         request.onupgradeneeded = function(event) {
@@ -141,7 +144,6 @@ function initializeDeckPattern(){
             let transaction = db.transaction('deck','readonly');
             let deckStore = transaction.objectStore('deck');
             
-            // let query = deckStore.get(curDeck);
             let query = deckStore.getAllKeys()
 
             query.onsuccess = function(event){
@@ -178,6 +180,7 @@ function initializeDeckPattern(){
 }
 
 function initializeSaveList(){
+    // Initializes the user's saved queries
     $("#SaveList").html("");
     sidSaved = JSON.parse(localStorage.getItem("idSave"));
     if(sidSaved){
@@ -279,6 +282,7 @@ function distributeCards(){
 }
 
 function cardFlip(){
+    // function to bind card flipping
     myCard = $(".myCard");
     myCard.unbind().removeData();
     myCard.flip();
@@ -296,11 +300,13 @@ function cardFlip(){
     });
 }
 function cardFlipEvent(event){
+    // function to bind what happens when a card is flipped.
     if(!(cardsFlippedAll||cardsOpened.includes(event.id))){
         cardsOpened.push(event.id)
     }
 }
 function cardFlipAll(){
+    // function to flip all cards, either open or close.
     myCard = $(".myCard");
     $("#linkFlipAll").click(function() {
         flippedCards = 0;
@@ -327,8 +333,8 @@ function cardFlipAll(){
         }
     });
 }
-// 04/07/2021 add
 function saveListClickItem(){
+    // function to view the queries saved from the list
     mySavedItem = $('.savedquery');
     mySavedItem.each(function(){
         $(this).click(function(){
@@ -419,6 +425,7 @@ function saveListClickItem(){
     });
 }
 function reShuffleClick(){
+    // function for binding reshuffling to the Reshuffle button
     $("#linkReshuffle").click(function() {
         if(cardsOpened.length>0){
             $('#reshuffleModalWarning').modal('show');
@@ -440,6 +447,7 @@ function reShuffleClick(){
     });
 }
 function reShuffle(){
+// function for reshuffling
     $("#loading-div").fadeIn(400,function(){
         distributeCards();
         cardFlip();
@@ -448,6 +456,7 @@ function reShuffle(){
     cardsOpened = []
 }
 function saveDrawModalClick(){
+    // function to open up a modal to save user's own query.
     $("#linkSaveDraw").click(function() {
         if(cardsOpened.length==0){
             $('#saveDrawModalNone').modal('show');
@@ -459,6 +468,7 @@ function saveDrawModalClick(){
     });    
 }
 function saveModalPopulate(){
+    // populates the savemodal after clicking savedrawmodal. This will not activate if there are no cards drawn or flipped open.
     stringTopRow="";
     stringMidRow="";
     stringBotRow="";
@@ -500,6 +510,7 @@ function saveModalPopulate(){
     $("#bottom-save").html(stringBotRow);  
 }
 function saveModalDrawSaveClick(){ 
+    // function to bind saving the queries
     formSave = $("#validate-form")
     formSave.validate({
         onclick: true,
@@ -516,7 +527,8 @@ function saveModalDrawSaveClick(){
             cfquestion = JSON.parse(localStorage.getItem("fquestion"));
             csaveCardArray = JSON.parse(localStorage.getItem("saveCardArray"));
 
-            //If none, create, else append data,
+            //If this was activated because of an edited saved query, 
+            // then it'll update the saved query. Else if none, create. Else append data,
             if(saveEditID>-1){
                 index = cidSaved.indexOf(parseInt(saveEditID));
                 ctitle[index] = gettitle;
@@ -580,14 +592,14 @@ function saveModalDrawSaveClick(){
             saveListClickItem();
         }
     });
-    // April 18. On Submit if all are true, save to cache
 }
-// April 20, needed functions: Edit saved query/, read zip file--upload custom deck--ongoing, export-import saved query 
 function zipFunc(){
+    // function to upload zip file to change deck skin
     var zip = new JSZip();
     form = $("#deckUpload-form")
     
     function validateUpload(el){
+        // validates the inside of the zip file
         if(!el){
             return false;
         }
@@ -605,7 +617,6 @@ function zipFunc(){
                 $("#btnUpload").html("Upload");
                 $("#btnUpload").attr("disabled", false);
                 message.setVal = false
-                // return false;
             }
             else{
                 let checkpass=null;
@@ -616,7 +627,6 @@ function zipFunc(){
 
                         message.setVal = false;
                         checkpass=false;
-                        // return false;
                     }
                 }
                 if (checkpass==null){
@@ -625,7 +635,6 @@ function zipFunc(){
                 $("#btnUpload").html("Upload");
                 $("#btnUpload").attr("disabled", false);                
             }   
-            // return true;
         });
     }
     
@@ -676,7 +685,6 @@ function zipFunc(){
     })
     $("#btnUpload").on("click", function(evt) {
         if(form.valid()&&message.getVal==true){   
-            // $("#deckUpload").val("");
             $("#btnUpload").attr("disabled", true);
             stringBtnChange ="<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>"+
             "Loading...";
@@ -770,6 +778,7 @@ function zipFunc(){
     });
 }
 function deckListClickItem(){
+    // function to change deck pattern by clicking from the list.
     myDeckListItem = $('.customDeck');
     myDeckListItem.each(function(){
         $(this).click(function(){
@@ -780,8 +789,9 @@ function deckListClickItem(){
         });
     });
 }
-//Validation-for zip file-do list
- function format(x, y) {
+
+function format(x, y) {
+    // Date formatting
     var z = {
         M: x.getMonth() + 1,
         d: x.getDate(),
@@ -798,6 +808,7 @@ function deckListClickItem(){
     });
 }
 function exportSaveQueries(){
+    // exports the saved query list
     exportSaves= $('#exportQueries');
     exportSaves.click(function(){
         sidSaved = JSON.parse(localStorage.getItem("idSave"));
@@ -813,15 +824,13 @@ function exportSaveQueries(){
                 cards: ssaveCardArray[i]
             }
         }
-        // Date.now();
-        // date.format("MMddyyyy_hhmm");
+
         var date = format(new Date(Date.now()),"MMddyyyy_hhmmss")
         exportData = JSON.stringify(exportList);
         exportfilename = "queries_"+date+".json";
         exportfile='data:application/json;charset=utf-8,'+ encodeURIComponent(exportData)
         
         var a = document.createElement("a");
-        // document.body.appendChild(a);
 
         a.href = exportfile;
         a.download = exportfilename;
@@ -830,8 +839,8 @@ function exportSaveQueries(){
     })
 }
 function importSaveQueries(){
-    importSaves = $('#importQueries');
-    //add modal asking clear list or add to list
+    // imports save query list
+    importSaves = $('#importQueries');     
     importSaves.click(function(){
         var upload = document.createElement("input",);
         upload.setAttribute("type", "file");
@@ -849,6 +858,7 @@ function importSaveQueries(){
     });
 }
 function saveListImportModal(){
+    // for modal asking to clear list or add to list when importing saved queries
     $("#btnAppendSaveList").click(function(){
         let idToIterate = Object.keys(importedSaveList);
         let iidSave = sidSaved;
@@ -902,6 +912,7 @@ function saveListImportModal(){
     });
 }
 function clearListModal(){
+    // for clearing saved query list in case user wants to get rid of it.
     $("#clearList").click(function(){
         let idSavecheck = JSON.parse(localStorage.getItem('idSave'))
         if(!idSavecheck){
@@ -933,6 +944,7 @@ function clearListModal(){
     });
 }
 function clearDeckListModal(){
+    // for clearing deck patterns list in case user wants to get rid of it.
     $("#clearCustomDecks").click(function(){
         let db;
         let request = indexedDB.open("deck",3);
