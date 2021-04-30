@@ -1,4 +1,4 @@
-# Tarot-Card-Web-App
+# Card-Web-App
 Tarot Cards
 Website right here:
 https://major-tarot-cards.000webhostapp.com/
